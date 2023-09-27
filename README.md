@@ -11,7 +11,7 @@
 
 ## Introduction
 This project is a simple example of how you would implement
-an authentication provider using JSON WebTokens, Spring Boot and Spring Security.
+an authentication provider using [JSON WebTokens](https://jwt.io/), Spring Boot and Spring Security.
 
 The database used is MySQL.
 
