@@ -94,7 +94,9 @@ Example response:
 {"message": "User registered successfully!"}
 ```
 Database changes:
+
 ![HeidiSQL-after-signup.png](img/HeidiSQL-after-signup.png)
+
 This will create a new user with the specified username and password in the database
 
 #### ```POST localhost:8080/api/auth/signin```
