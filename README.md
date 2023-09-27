@@ -5,6 +5,7 @@
 * [Running the application locally](#running-the-application-locally)
 * [Spring configuration YAML](#spring-application-yaml)
 * [Using the API](#using-the-API)
+* [Docker](#docker)
 * [Copyright](#copyright)
 * [Author](#author)
 * [Links](#links)
@@ -15,11 +16,14 @@ an authentication provider using [JSON WebTokens](https://jwt.io/), Spring Boot 
 
 The database used is MySQL.
 
+I <b>highly encourage you</b> to use [Docker](#docker) to run the project
+
 ## Requirements
 - [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - Strongly recommended [IntelliJ IDE](https://www.jetbrains.com/idea/download/?section=windows), it's amazing.
 - [Maven 3](https://maven.apache.org) (There is a mvn wrapper included in this project)
 - [MySQL 8.1](https://dev.mysql.com/downloads/mysql/)
+- (Optional) [Docker](https://docs.docker.com/engine/install/)
 - (Optional) [HeidiSQL](https://www.heidisql.com/download.php) A simple tool for accessing your MySQL DB
 - (Optional) [Postman](https://www.postman.com/downloads/) 
 
@@ -31,9 +35,9 @@ Then, configure your chosen username and password in application.yml:
 ```yaml
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/testdb?useSSL=FALSE"
+    url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/testdb?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
     username: "root"
-    password: "qaz88x"
+    password: ${MYSQL_PASSWORD:qaz88x}
 ```
 Upon startup, the application will execute the SQL queries inside ```/resources/import.sql```
 which will populate the user permissions in the database:
@@ -44,7 +48,7 @@ INSERT INTO roles(name) VALUES ('ROLE_ADMIN');
 ```
 
 ### 2. Starting the Spring Boot app
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.xaxo.authservice.Application` class from your IDE.
+There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.anto.authservice.Application` class from your IDE.
 
 Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
 
@@ -57,14 +61,16 @@ mvn spring-boot:run
 spring: 
   datasource:
     # MySQL connection details
-    url: "jdbc:mysql://localhost:3306/testdb?useSSL=FALSE"
+    url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/testdb?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
     username: "root"
-    password: "qaz88x"
+    password: ${MYSQL_PASSWORD:qaz88x}
   jpa:
     properties:
       hibernate:
         dialect: "org.hibernate.dialect.MySQLDialect"
     hibernate:
+      # Print sql requests, useful during development
+      show-sql: true
       # Clear DB after each service start for easier development
       ddl-auto: "create"
 app:
@@ -84,7 +90,7 @@ Used for initial registration in the database. Example payload:
 ```json
 {
 "username": "mod",
-"email": "mod@xaxo.com",
+"email": "mod@anto.com",
 "password": "123456",
 "role": ["mod", "user"]
 }
@@ -116,7 +122,7 @@ Example response:
   "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2QiLCJpYXQiOjE2OTU4MjY0NTEsImV4cCI6MTY5NTkxMjg1MX0.eFe8VtXxEXp7lDlMM9evXG-dx9oSarzJZto5I9d3D-t53mTsJ7iU3q6_vvi6dJ_BUnWzGm7YLaC6Hm1iQ3ZKJA",
   "id": 1,
   "username": "mod",
-  "email": "mod@xaxo.com",
+  "email": "mod@anto.com",
   "roles": [
     "ROLE_USER",
     "ROLE_MODERATOR"
@@ -134,6 +140,13 @@ This endpoint is only accessible if the JWT provided has rights to access *mod* 
 <b>Required header</b>: ```Authorization: Bearer <token>```
 
 How this looks like in Postman: ![Request-mods-only.png](img/Request-mods-only.png)
+
+## Docker
+Install [Docker](https://docs.docker.com/engine/install/)
+
+The docker configs are in [Dockerfile](service/Dockerfile) and [compose](compose.yaml)
+
+Run ```docker compose up``` to start a MySQL instance and the service with a single command!
 
 ## Copyright
 License: [BSD-4-Clause](LICENSE)

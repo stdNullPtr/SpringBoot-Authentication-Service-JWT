@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://${MYSQL_HOST:localhost}:3306/testdb?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
+    username: "root"
+    password: ${MYSQL_PASSWORD:qaz88x}
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.MySQLDialect"
+    hibernate:
+      ddl-auto: "create"
+    show-sql: true
+app:
+  jwt:
+    expirationMs: "86400000"
+    secret: "ufGJqqC94OBE8qJFigbB55Pf2mLCXUDomQKP87qaGl/Nj9b/aWOlvtJ+bBtggH9XnBHR4M7SBtGOq++XfXw0iw=="
