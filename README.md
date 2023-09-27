@@ -1,4 +1,4 @@
-# Spring Boot Authentication Service (JWT)
+# Spring Boot Authentication Service API (JWT)
 
 * [Introduction](#introduction)
 * [Requirements](#requirements)
