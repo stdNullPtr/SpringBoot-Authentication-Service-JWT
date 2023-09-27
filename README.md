@@ -1,5 +1,14 @@
 # Spring Boot Authentication Service (JWT)
 
+* [Introduction](#introduction)
+* [Requirements](#requirements)
+* [Running the application locally](#running-the-application-locally)
+* [Spring configuration YAML](#spring-application-yaml)
+* [Using the API](#using-the-API)
+* [Copyright](#copyright)
+* [Author](#author)
+* [Links](#links)
+
 ## Introduction
 This project is a simple example of how you would implement
 an authentication provider using JSON WebTokens, Spring Boot and Spring Security.
@@ -43,7 +52,7 @@ Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/
 mvn spring-boot:run
 ```
 
-## application.yml
+## Spring application yaml
 ```yaml
 spring: 
   datasource:
@@ -124,4 +133,11 @@ This endpoint is only accessible if the JWT provided has rights to access *mod* 
 
 How this looks like in Postman: ![Request-mods-only.png](img/Request-mods-only.png)
 
+## Copyright
+License: [BSD-4-Clause](LICENSE)
+
+## Author
+[Antonio - LinkedIn](https://www.linkedin.com/in/antonio-lyubchev/)
+
+## Links
 *Special thanks to [Bezkoder](https://www.bezkoder.com/)*
