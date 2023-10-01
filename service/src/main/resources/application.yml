@@ -12,5 +12,9 @@ spring:
     show-sql: true
 app:
   jwt:
-    expirationMs: "86400000"
+    expirationMs: "3600000"
+    refreshExpirationMs: "86400000"
+    # for test
+    #expirationMs: "60000"
+    #refreshExpirationMs: "120000"
     secret: "ufGJqqC94OBE8qJFigbB55Pf2mLCXUDomQKP87qaGl/Nj9b/aWOlvtJ+bBtggH9XnBHR4M7SBtGOq++XfXw0iw=="

@@ -2,6 +2,7 @@ package com.anto.authservice.controller;
 
 import com.anto.authservice.model.payload.request.LoginRequest;
 import com.anto.authservice.model.payload.request.SignupRequest;
+import com.anto.authservice.model.payload.request.TokenRefreshRequest;
 import com.anto.authservice.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return ResponseEntity.ok(authService.signup(signUpRequest));
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
+        log.info("Refresh token request!");
+        return ResponseEntity.ok(authService.refreshToken(tokenRefreshRequest));
     }
 }

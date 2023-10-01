@@ -1,16 +1,20 @@
 package com.anto.authservice.service;
 
+import com.anto.authservice.exception.ApiException;
+import com.anto.authservice.exception.TokenRefreshException;
 import com.anto.authservice.model.ERole;
+import com.anto.authservice.model.RefreshToken;
 import com.anto.authservice.model.Role;
 import com.anto.authservice.model.User;
-import com.anto.authservice.model.payload.response.JwtResponse;
-import com.anto.authservice.model.payload.response.MessageResponse;
-import com.anto.authservice.repository.UserRepository;
-import com.anto.authservice.security.jwt.JwtUtils;
-import com.anto.authservice.exception.ApiException;
 import com.anto.authservice.model.payload.request.LoginRequest;
 import com.anto.authservice.model.payload.request.SignupRequest;
+import com.anto.authservice.model.payload.request.TokenRefreshRequest;
+import com.anto.authservice.model.payload.response.JwtResponse;
+import com.anto.authservice.model.payload.response.MessageResponse;
+import com.anto.authservice.model.payload.response.TokenRefreshResponse;
 import com.anto.authservice.repository.RoleRepository;
+import com.anto.authservice.repository.UserRepository;
+import com.anto.authservice.security.jwt.JwtUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +35,7 @@ import java.util.stream.Collectors;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
@@ -48,8 +53,12 @@ public class AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        refreshTokenService.deleteByUserId(userDetails.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
         return new JwtResponse(
                 jwt,
+                refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
@@ -65,7 +74,6 @@ public class AuthService {
             throw new ApiException("Error: Email is already in use!");
         }
 
-        // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
@@ -104,5 +112,18 @@ public class AuthService {
             }
             default -> throw new ApiException("Error: Role is not found.");
         }
+    }
+
+    public TokenRefreshResponse refreshToken(TokenRefreshRequest tokenRefreshRequest) {
+        String requestRefreshToken = tokenRefreshRequest.getRefreshToken();
+
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return new TokenRefreshResponse(token, requestRefreshToken);
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
 }

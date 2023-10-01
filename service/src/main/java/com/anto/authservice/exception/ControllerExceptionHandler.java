@@ -40,6 +40,12 @@ public class ControllerExceptionHandler {
         return new ErrorResponse("Bad request: " + fieldErrors, Date.from(Instant.now()));
     }
 
+    @ExceptionHandler(TokenRefreshException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorResponse handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
+        return new ErrorResponse(ex.getMessage(), Date.from(Instant.now()));
+    }
+
     @AllArgsConstructor
     @Getter
     private static class CustomFieldError {
