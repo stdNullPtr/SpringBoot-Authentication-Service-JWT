@@ -165,7 +165,7 @@ The token provided in the *token* field can now be used alongside future API cal
 
 Used to request a new access token.
 
-The new token is stored in the database, and removed once you sign in again
+The new token is stored in the database, and removed once you sign in again (recreated)
 
 Example payload (The refresh token received during [sign in](#post-localhost8080apiauthsignin))
 
