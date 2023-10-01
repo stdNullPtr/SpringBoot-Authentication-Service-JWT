@@ -48,12 +48,9 @@ Upon startup, the application will execute the SQL queries inside ```/resources/
 which will populate the user permissions in the database:
 
 ```sql
-INSERT INTO roles(name)
-VALUES ('ROLE_USER');
-INSERT INTO roles(name)
-VALUES ('ROLE_MODERATOR');
-INSERT INTO roles(name)
-VALUES ('ROLE_ADMIN');
+INSERT INTO roles(name) VALUES ('ROLE_USER');
+INSERT INTO roles(name) VALUES ('ROLE_MODERATOR');
+INSERT INTO roles(name) VALUES ('ROLE_ADMIN');
 ```
 
 ### 2. Starting the Spring Boot app
