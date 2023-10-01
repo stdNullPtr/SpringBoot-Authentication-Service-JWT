@@ -147,7 +147,7 @@ Example response:
 ```json
 {
   "type": "Bearer",
-  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2QiLCJpYXQiOjE2OTU4MjY0NTEsImV4cCI6MTY5NTkxMjg1MX0.eFe8VtXxEXp7lDlMM9evXG-dx9oSarzJZto5I9d3D-t53mTsJ7iU3q6_vvi6dJ_BUnWzGm7YLaC6Hm1iQ3ZKJA",
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2QiLCJpYXQiOjE2OTU4MjY0NTEsImV4cCI6MTY5NTkxMjg1MX0.eFe8VtXxEXp7lDlMM9evXG-dx9oSarzJZto5I9d3D-t53mTsJ7iU3q6_vvi6dJ_BUnWzGm7YLaC6Hm1iQ3ZKJA",
   "refreshToken": "d85c5c12-363b-4a9c-8ac8-98823716ec1e",
   "id": 1,
   "username": "mod",
@@ -164,6 +164,8 @@ The token provided in the *token* field can now be used alongside future API cal
 #### ```POST localhost:8080/api/auth/refreshtoken```
 
 Used to request a new access token.
+
+The new token is stored in the database, and removed once you sign in again
 
 Example payload (The refresh token received during [sign in](#post-localhost8080apiauthsignin))
 
